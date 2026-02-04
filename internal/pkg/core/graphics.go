@@ -58,13 +58,30 @@ func (g *graphics) LoadDir(dir string) error {
 	})
 }
 
-func (g *graphics) Draw(image string, x int32, y int32) error {
+func (g *graphics) DrawImg(image string, x int32, y int32) error {
 	texture, ok := g.textures[image]
 	if !ok {
 		return errors.New("image not found")
 	}
 
 	rl.DrawTexture(texture, x, y, rl.White)
+
+	return nil
+}
+
+func (g *graphics) DrawImgRect(image string, sourceRect rl.Rectangle) error {
+	texture, ok := g.textures[image]
+	if !ok {
+		return errors.New("image not found")
+	}
+
+	rl.DrawTexturePro(texture,
+		rl.Rectangle{0, 0, float32(texture.Width), float32(texture.Height)},
+		sourceRect,
+		rl.Vector2{0, 0},
+		0.0,
+		rl.White,
+	)
 
 	return nil
 }
