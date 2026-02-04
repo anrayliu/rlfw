@@ -1,0 +1,5 @@
+draw center
+text
+events handler
+load dir ext check
+rect
