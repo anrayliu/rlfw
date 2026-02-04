@@ -35,11 +35,6 @@ func (g *graphics) LoadImg(path string) error {
 
 	filename := strings.TrimSuffix(filepath.Base(path), ext)
 
-	_, exists := g.images[filename]
-	if exists {
-		return errors.New("image already loaded")
-	}
-
 	g.images[filename] = rl.LoadImage(path)
 	g.textures[filename] = rl.LoadTextureFromImage(g.images[filename])
 
