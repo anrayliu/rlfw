@@ -6,7 +6,13 @@ import (
 
 type Game struct{}
 
-func (c *Game) Init(e *core.Engine) {
+func (c *Game) Start(e *core.Engine) {
+}
+
+func (c *Game) End(e *core.Engine) {
+}
+
+func (c *Game) Resize(e *core.Engine) {
 }
 
 func (c *Game) Update(e *core.Engine) {

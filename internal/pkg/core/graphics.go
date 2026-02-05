@@ -13,12 +13,22 @@ import (
 type graphics struct {
 	images   map[string]*rl.Image
 	textures map[string]rl.Texture2D
+	fonts    map[string]rl.Font
+
+	defaultImg     *rl.Image
+	defaultTexture rl.Texture2D
 }
 
 func newGraphics() *graphics {
+	tmp := rl.GenImageColor(256, 256, rl.Red)
+
 	return &graphics{
 		images:   map[string]*rl.Image{},
 		textures: map[string]rl.Texture2D{},
+		fonts:    map[string]rl.Font{},
+
+		defaultImg:     tmp,
+		defaultTexture: rl.LoadTextureFromImage(tmp),
 	}
 }
 
@@ -53,30 +63,26 @@ func (g *graphics) LoadDir(dir string) error {
 	})
 }
 
-func (g *graphics) DrawImg(image string, x int32, y int32) error {
-	texture, ok := g.textures[image]
+func (g *graphics) GetTexture(name string) rl.Texture2D {
+	texture, ok := g.textures[name]
 	if !ok {
-		return errors.New("image not found")
+		return g.defaultTexture
 	}
-
-	rl.DrawTexture(texture, x, y, rl.White)
-
-	return nil
+	return texture
 }
 
-func (g *graphics) DrawImgRect(image string, sourceRect rl.Rectangle) error {
-	texture, ok := g.textures[image]
+func (g *graphics) GetImg(name string) *rl.Image {
+	img, ok := g.images[name]
 	if !ok {
-		return errors.New("image not found")
+		return g.defaultImg
 	}
+	return img
+}
 
-	rl.DrawTexturePro(texture,
-		rl.Rectangle{0, 0, float32(texture.Width), float32(texture.Height)},
-		sourceRect,
-		rl.Vector2{0, 0},
-		0.0,
-		rl.White,
-	)
-
-	return nil
+func (g *graphics) GetFont(name string) rl.Font {
+	font, ok := g.fonts[name]
+	if !ok {
+		return rl.GetFontDefault()
+	}
+	return font
 }

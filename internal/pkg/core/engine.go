@@ -16,49 +16,51 @@ type Config struct {
 }
 
 type Runnable interface {
-	Init(e *Engine)
+	Resize(e *Engine)
+	Start(e *Engine)
 	Update(e *Engine)
 	Draw(e *Engine)
+	End(e *Engine)
 }
 
 func NewEngine(cfg Config) (*Engine, error) {
 	rl.SetTraceLogLevel(cfg.LogLevel)
+	rl.SetTargetFPS(cfg.Fps)
 
-	win, err := newWin(cfg.WinW, cfg.WinH, cfg.Name)
-	if err != nil {
-		return nil, err
+	if cfg.WinW == 0 && cfg.WinH == 0 {
+		rl.SetConfigFlags(rl.FlagFullscreenMode)
+	} else if cfg.WinW <= 0 || cfg.WinH <= 0 {
+		return nil, errors.New("bad window size")
 	}
 
+	rl.InitWindow(cfg.WinW, cfg.WinH, cfg.Name)
+
 	graphics := newGraphics()
-	err = graphics.LoadDir("assets")
+	err := graphics.LoadDir("assets")
 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return nil, err
 	}
 
-	engine := &Engine{
-		Win:      win,
+	return &Engine{
 		Graphics: graphics,
 		Cfg:      cfg,
-	}
-
-	rl.SetTargetFPS(cfg.Fps)
-
-	return engine, nil
+	}, nil
 }
 
 type Engine struct {
-	Win      *window
 	Graphics *graphics
 	Cfg      Config
 }
 
 func (e *Engine) Run(r Runnable) {
-	defer e.Win.close()
+	defer rl.CloseWindow()
 
-	r.Init(e)
+	r.Start(e)
 
 	for !rl.WindowShouldClose() {
 		r.Update(e)
+
+		rl.ClearBackground(rl.White)
 
 		rl.BeginDrawing()
 
@@ -66,4 +68,6 @@ func (e *Engine) Run(r Runnable) {
 
 		rl.EndDrawing()
 	}
+
+	r.End(e)
 }
