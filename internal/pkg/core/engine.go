@@ -35,21 +35,21 @@ func NewEngine(cfg Config) (*Engine, error) {
 
 	rl.InitWindow(cfg.WinW, cfg.WinH, cfg.Name)
 
-	graphics := newGraphics()
-	err := graphics.LoadDir("assets")
+	resources := newResources()
+	err := resources.LoadDir("assets")
 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return nil, err
 	}
 
 	return &Engine{
-		Graphics: graphics,
-		Cfg:      cfg,
+		Resources: resources,
+		Cfg:       cfg,
 	}, nil
 }
 
 type Engine struct {
-	Graphics *graphics
-	Cfg      Config
+	Resources *Resources
+	Cfg       Config
 }
 
 func (e *Engine) Run(r Runnable) {
