@@ -15,8 +15,7 @@ type Config struct {
 	LogLevel rl.TraceLogLevel
 }
 
-type Runnable interface {
-	Resize(e *Engine)
+type State interface {
 	Start(e *Engine)
 	Update(e *Engine)
 	Draw(e *Engine)
@@ -44,30 +43,47 @@ func NewEngine(cfg Config) (*Engine, error) {
 	return &Engine{
 		Resources: resources,
 		Cfg:       cfg,
+
+		quit:       false,
+		firstState: true,
 	}, nil
 }
 
 type Engine struct {
 	Resources *Resources
 	Cfg       Config
+
+	quit       bool
+	firstState bool // only defer window close for first state
 }
 
-func (e *Engine) Run(r Runnable) {
-	defer rl.CloseWindow()
+func (e *Engine) Run(state State) {
+	if e.firstState {
+		defer rl.CloseWindow()
+		e.firstState = false
+	}
+	defer func() {
+		state.End(e)
+		e.quit = false
+	}()
 
-	r.Start(e)
+	e.quit = false
 
-	for !rl.WindowShouldClose() {
-		r.Update(e)
+	state.Start(e)
+
+	for !rl.WindowShouldClose() && !e.quit {
+		state.Update(e)
 
 		rl.ClearBackground(rl.White)
 
 		rl.BeginDrawing()
 
-		r.Draw(e)
+		state.Draw(e)
 
 		rl.EndDrawing()
 	}
+}
 
-	r.End(e)
+func (e *Engine) Quit() {
+	e.quit = true
 }

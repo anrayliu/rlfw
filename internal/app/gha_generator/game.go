@@ -6,17 +6,14 @@ import (
 
 type Game struct{}
 
-func (c *Game) Start(e *core.Engine) {
+func (g *Game) Start(e *core.Engine) {
 }
 
-func (c *Game) End(e *core.Engine) {
+func (g *Game) End(e *core.Engine) {
 }
 
-func (c *Game) Resize(e *core.Engine) {
+func (g *Game) Update(e *core.Engine) {
 }
 
-func (c *Game) Update(e *core.Engine) {
-}
-
-func (c *Game) Draw(e *core.Engine) {
+func (g *Game) Draw(e *core.Engine) {
 }
