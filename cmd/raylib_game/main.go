@@ -1,8 +1,8 @@
 package main
 
 import (
-	app "anray/gha-generator/internal/app/gha_generator"
-	core "anray/gha-generator/internal/pkg/core"
+	app "anray/raylib-game/internal/app/raylib_game"
+	core "anray/raylib-game/internal/pkg/core"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )

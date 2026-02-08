@@ -1,7 +1,7 @@
-package gha_generator
+package raylib_game
 
 import (
-	core "anray/gha-generator/internal/pkg/core"
+	core "anray/raylib-game/internal/pkg/core"
 )
 
 type Game struct{}

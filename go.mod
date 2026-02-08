@@ -1,4 +1,4 @@
-module anray/gha-generator
+module anray/raylib-game
 
 go 1.22.2
 
