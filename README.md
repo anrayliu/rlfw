@@ -41,7 +41,7 @@ func (g *Game) Update(e *core.Engine) {
 func (g *Game) Draw(e *core.Engine) {
 }
 ```
-Start new states with `e.Run(&MyState{})`. This places a new state on the stack and gives control to it.
+Uses a stack-based state manager. Start new states with `e.Run(&MyState{})`. This places a new state on the stack and runs it.
 Exit from the current state with `e.Quit()`. This returns to the previous state in the stack. To exit from
 all states, use `e.QuitAll()`.
 
