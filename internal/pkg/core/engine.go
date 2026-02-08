@@ -63,6 +63,7 @@ type Engine struct {
 func (e *Engine) Run(state State) {
 	if e.firstState {
 		defer rl.CloseWindow()
+		defer e.Resources.cleanUp()
 		e.firstState = false
 	}
 	defer func() {

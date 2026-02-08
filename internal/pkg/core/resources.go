@@ -120,3 +120,15 @@ func (r *Resources) GetFont(name string) rl.Font {
 	}
 	return font
 }
+
+func (r *Resources) cleanUp() {
+	for _, img := range r.images {
+		rl.UnloadImage(img)
+	}
+	for _, texture := range r.textures {
+		rl.UnloadTexture(texture)
+	}
+	for _, font := range r.fonts {
+		rl.UnloadFont(font)
+	}
+}
