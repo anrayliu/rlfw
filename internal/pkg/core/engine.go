@@ -45,6 +45,7 @@ func NewEngine(cfg Config) (*Engine, error) {
 		Cfg:       cfg,
 
 		quit:       false,
+		quitAll:    false,
 		firstState: true,
 	}, nil
 }
@@ -53,7 +54,9 @@ type Engine struct {
 	Resources *Resources
 	Cfg       Config
 
+	// internal state management vars
 	quit       bool
+	quitAll    bool
 	firstState bool // only defer window close for first state
 }
 
@@ -64,10 +67,10 @@ func (e *Engine) Run(state State) {
 	}
 	defer func() {
 		state.Exit(e)
-		e.quit = false
+		if !e.quitAll {
+			e.quit = false
+		}
 	}()
-
-	e.quit = false
 
 	state.Enter(e)
 
@@ -86,4 +89,9 @@ func (e *Engine) Run(state State) {
 
 func (e *Engine) Quit() {
 	e.quit = true
+}
+
+func (e *Engine) QuitAll() {
+	e.quitAll = true
+	e.Quit()
 }
