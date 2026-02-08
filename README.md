@@ -17,7 +17,7 @@ type Config struct {
 	LogLevel rl.TraceLogLevel
 }
 ```
-All application logic can be placed in `State` structs, which have the following structure:
+All application logic can be placed in `State` structs, which have the following interface:
 ```
 type Game struct{}
 
@@ -44,3 +44,11 @@ func (g *Game) Draw(e *core.Engine) {
 Start new states with `e.Run(&MyState{})`. This places a new state on the stack and gives control to it.
 Exit from the current state with `e.Quit()`. This returns to the previous state in the stack. To exit from
 all states, use `e.QuitAll()`.
+
+On app start, images (`.png`, `.jpg`) and fonts (`.otf`, `.ttf`) from the `assets` directory will be automatically loaded.
+Inside a state, they can be accessed with `e.Resources.GetImg(name)`, `e.Resources.GetTexture(name)`, and `e.Resources.GetFont(name)`.
+Further resource loading can be done with `e.Resources.LoadDir(path)`, `e.Resources.LoadImg(path)` (also loads the texture), or `e.Resources.LoadFont(path)`.
+Resources are automatically unloaded when all states end.
+
+This framework is designed to assist Raylib, not replace it. I tried avoiding abstraction for the sake of abstraction, and only added features if 
+it actually made the dev experience better.
