@@ -2,6 +2,7 @@ package internal
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -33,34 +34,65 @@ func newResources() *Resources {
 	}
 }
 
-func (r *Resources) LoadImg(path string) error {
+func splitFileName(path string) (string, string, error) {
 	_, err := os.Stat(path)
 	if err != nil {
-		return errors.New("file does not exist")
+		return "", "", errors.New("file does not exist")
 	}
 
 	ext := filepath.Ext(path)
-	if ext != ".png" {
-		return errors.New("unsupported file format")
-	}
-
 	filename := strings.TrimSuffix(filepath.Base(path), ext)
 
-	r.images[filename] = rl.LoadImage(path)
-	r.textures[filename] = rl.LoadTextureFromImage(r.images[filename])
+	return filename, ext, nil
+}
 
-	return nil
+func (r *Resources) LoadImg(path string) error {
+	base, ext, err := splitFileName(path)
+	if err != nil {
+		return err
+	}
+
+	if ext == ".png" || ext == ".jpg" {
+		r.images[base] = rl.LoadImage(path)
+		r.textures[base] = rl.LoadTextureFromImage(r.images[base])
+
+		return nil
+	}
+
+	return errors.New("unsupported file format")
+}
+
+func (r *Resources) LoadFont(path string) error {
+	base, ext, err := splitFileName(path)
+	if err != nil {
+		return err
+	}
+
+	if ext == ".ttf" || ext == ".otf" {
+		r.fonts[base] = rl.LoadFont(path)
+
+		return nil
+	}
+
+	return errors.New("unsupported file format")
 }
 
 func (r *Resources) LoadDir(dir string) error {
-	return filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
+	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
-			return err
+			fmt.Printf("error while walking over %s: %s", path, err)
 		}
-		if info.IsDir() {
+		if entry.IsDir() {
 			return nil
 		}
-		return r.LoadImg(path)
+		ext := filepath.Ext(path)
+		if ext == ".png" || ext == ".jpg" {
+			return r.LoadImg(path)
+		}
+		if ext == ".ttf" || ext == ".otf" {
+			return r.LoadFont(path)
+		}
+		return nil
 	})
 }
 
