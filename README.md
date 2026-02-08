@@ -23,12 +23,12 @@ type Game struct{}
 
 // init logic
 
-func (g *Game) Start(e *core.Engine) {
+func (g *Game) Enter(e *core.Engine) {
 }
 
 // clean up logic
 
-func (g *Game) End(e *core.Engine) {
+func (g *Game) Exit(e *core.Engine) {
 }
 
 // main app logic, called every frame

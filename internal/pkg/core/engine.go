@@ -16,10 +16,10 @@ type Config struct {
 }
 
 type State interface {
-	Start(e *Engine)
+	Enter(e *Engine)
+	Exit(e *Engine)
 	Update(e *Engine)
 	Draw(e *Engine)
-	End(e *Engine)
 }
 
 func NewEngine(cfg Config) (*Engine, error) {
@@ -63,13 +63,13 @@ func (e *Engine) Run(state State) {
 		e.firstState = false
 	}
 	defer func() {
-		state.End(e)
+		state.Exit(e)
 		e.quit = false
 	}()
 
 	e.quit = false
 
-	state.Start(e)
+	state.Enter(e)
 
 	for !rl.WindowShouldClose() && !e.quit {
 		state.Update(e)

@@ -6,10 +6,10 @@ import (
 
 type Game struct{}
 
-func (g *Game) Start(e *core.Engine) {
+func (g *Game) Enter(e *core.Engine) {
 }
 
-func (g *Game) End(e *core.Engine) {
+func (g *Game) Exit(e *core.Engine) {
 }
 
 func (g *Game) Update(e *core.Engine) {
