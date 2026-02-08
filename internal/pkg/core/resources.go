@@ -2,8 +2,8 @@ package internal
 
 import (
 	"errors"
-	"fmt"
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -55,7 +55,6 @@ func (r *Resources) LoadImg(path string) error {
 	if ext == ".png" || ext == ".jpg" {
 		r.images[base] = rl.LoadImage(path)
 		r.textures[base] = rl.LoadTextureFromImage(r.images[base])
-
 		return nil
 	}
 
@@ -70,7 +69,6 @@ func (r *Resources) LoadFont(path string) error {
 
 	if ext == ".ttf" || ext == ".otf" {
 		r.fonts[base] = rl.LoadFont(path)
-
 		return nil
 	}
 
@@ -80,7 +78,7 @@ func (r *Resources) LoadFont(path string) error {
 func (r *Resources) LoadDir(dir string) error {
 	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
-			fmt.Printf("error while walking over %s: %s", path, err)
+			log.Printf("error while walking over %s: %s", path, err)
 		}
 		if entry.IsDir() {
 			return nil
@@ -99,6 +97,7 @@ func (r *Resources) LoadDir(dir string) error {
 func (r *Resources) GetTexture(name string) rl.Texture2D {
 	texture, ok := r.textures[name]
 	if !ok {
+		log.Printf("texture not found: %s", name)
 		return r.defaultTexture
 	}
 	return texture
@@ -107,6 +106,7 @@ func (r *Resources) GetTexture(name string) rl.Texture2D {
 func (r *Resources) GetImg(name string) *rl.Image {
 	img, ok := r.images[name]
 	if !ok {
+		log.Printf("image not found: %s", name)
 		return r.defaultImg
 	}
 	return img
@@ -115,6 +115,7 @@ func (r *Resources) GetImg(name string) *rl.Image {
 func (r *Resources) GetFont(name string) rl.Font {
 	font, ok := r.fonts[name]
 	if !ok {
+		log.Printf("font not found: %s", name)
 		return rl.GetFontDefault()
 	}
 	return font

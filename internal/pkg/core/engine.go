@@ -2,7 +2,7 @@ package internal
 
 import (
 	"errors"
-	"io/fs"
+	"log"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -36,8 +36,8 @@ func NewEngine(cfg Config) (*Engine, error) {
 
 	resources := newResources()
 	err := resources.LoadDir("assets")
-	if err != nil && !errors.Is(err, fs.ErrNotExist) {
-		return nil, err
+	if err != nil {
+		log.Printf("error when loading assets folder: %s", err)
 	}
 
 	return &Engine{
