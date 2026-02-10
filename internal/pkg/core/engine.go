@@ -1,4 +1,4 @@
-package internal
+package core
 
 import (
 	"errors"
@@ -6,14 +6,6 @@ import (
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
-
-type Config struct {
-	WinW     int32
-	WinH     int32
-	Name     string
-	Fps      int32
-	LogLevel rl.TraceLogLevel
-}
 
 type State interface {
 	Enter(e *Engine)
@@ -26,9 +18,10 @@ func NewEngine(cfg Config) (*Engine, error) {
 	rl.SetTraceLogLevel(cfg.LogLevel)
 	rl.SetTargetFPS(cfg.Fps)
 
-	if cfg.WinW == 0 && cfg.WinH == 0 {
-		rl.SetConfigFlags(rl.FlagFullscreenMode)
-	} else if cfg.WinW <= 0 || cfg.WinH <= 0 {
+	rl.SetConfigFlags(cfg.WinMode)
+
+	// window dimensions don't matter if fullscreen
+	if (cfg.WinW <= 0 || cfg.WinH <= 0) && cfg.WinMode != rl.FlagFullscreenMode {
 		return nil, errors.New("bad window size")
 	}
 

@@ -11,6 +11,7 @@ func main() {
 	engine, err := core.NewEngine(core.Config{
 		WinW:     800,
 		WinH:     600,
+		WinMode:  0,
 		Name:     "test",
 		Fps:      60,
 		LogLevel: rl.LogDebug,
