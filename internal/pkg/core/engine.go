@@ -12,6 +12,7 @@ type State interface {
 	Exit(e *Engine)
 	Update(e *Engine)
 	Draw(e *Engine)
+	Resize(e *Engine)
 }
 
 func NewEngine(cfg Config) (*Engine, error) {
@@ -37,9 +38,9 @@ func NewEngine(cfg Config) (*Engine, error) {
 		Resources: resources,
 		Cfg:       cfg,
 
-		quit:       false,
-		quitAll:    false,
-		firstState: true,
+		quit:    false,
+		quitAll: false,
+		states:  NewStack[State](),
 	}, nil
 }
 
@@ -47,20 +48,29 @@ type Engine struct {
 	Resources *Resources
 	Cfg       Config
 
+	states *Stack[State]
+
 	// internal state management vars
-	quit       bool
-	quitAll    bool
-	firstState bool // only defer window close for first state
+	quit    bool
+	quitAll bool
+}
+
+func (e *Engine) resizeStates() {
+	for _, state := range e.states.GetSlice() {
+		state.Resize(e)
+	}
 }
 
 func (e *Engine) Run(state State) {
-	if e.firstState {
+	e.states.Push(state)
+	if e.states.Len() == 1 {
 		defer rl.CloseWindow()
 		defer e.Resources.cleanUp()
-		e.firstState = false
 	}
 	defer func() {
 		state.Exit(e)
+		e.states.Pop()
+
 		if !e.quitAll {
 			e.quit = false
 		}
@@ -69,6 +79,10 @@ func (e *Engine) Run(state State) {
 	state.Enter(e)
 
 	for !rl.WindowShouldClose() && !e.quit {
+		if rl.IsWindowResized() {
+			e.resizeStates()
+		}
+
 		state.Update(e)
 
 		rl.ClearBackground(rl.White)

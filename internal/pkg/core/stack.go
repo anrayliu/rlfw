@@ -4,7 +4,7 @@ type Stack[T any] struct {
 	data []T
 }
 
-func New[T any]() *Stack[T] {
+func NewStack[T any]() *Stack[T] {
 	return &Stack[T]{data: make([]T, 0)}
 }
 
@@ -37,4 +37,8 @@ func (s *Stack[T]) Len() int {
 
 func (s *Stack[T]) IsEmpty() bool {
 	return len(s.data) == 0
+}
+
+func (s *Stack[T]) GetSlice() []T {
+	return s.data
 }
