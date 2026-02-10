@@ -78,7 +78,13 @@ func (e *Engine) Run(state State) {
 
 	state.Enter(e)
 
-	for !rl.WindowShouldClose() && !e.quit {
+	for {
+		if rl.WindowShouldClose() {
+			e.QuitAll()
+		} else if e.quit {
+			break
+		}
+
 		if rl.IsWindowResized() {
 			e.resizeStates()
 		}
