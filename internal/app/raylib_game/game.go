@@ -17,3 +17,6 @@ func (g *Game) Update(e *core.Engine) {
 
 func (g *Game) Draw(e *core.Engine) {
 }
+
+func (g *Game) Resize(e *core.Engine) {
+}
