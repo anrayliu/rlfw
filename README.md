@@ -1,5 +1,6 @@
 # RSky
 Mini Go-RayLib framework that manages some inconvenient things for you. Based on a similar project I made a few years ago for Pygame.
+To use, clone the file structure here and rename `raylib_game` to your app.
 
 I plan on using this for my own projects, so I want to update it with functionality as I discover use cases.
 
@@ -12,6 +13,7 @@ It can be configured with the `Config` struct found in the `main` function.
 type Config struct {
 	WinW     int32
 	WinH     int32
+	WinMode  uint32
 	Name     string
 	Fps      int32
 	LogLevel rl.TraceLogLevel
@@ -40,8 +42,13 @@ func (g *Game) Update(e *core.Engine) {
 
 func (g *Game) Draw(e *core.Engine) {
 }
+
+// called when window is resized
+
+func (g *Game) Resize(e *core.Engine) {
+}
 ```
-Uses a stack-based state manager. Start new states with `e.Run(&MyState{})`. This places a new state on the stack and runs it.
+Uses a stack-based state manager. Start new states with `e.Run(&MyState{})`.
 Exit from the current state with `e.Quit()`. This returns to the previous state in the stack. To exit from
 all states, use `e.QuitAll()`.
 
