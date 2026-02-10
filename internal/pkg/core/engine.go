@@ -56,8 +56,8 @@ type Engine struct {
 }
 
 func (e *Engine) resizeStates() {
-	for _, state := range e.states.GetSlice() {
-		state.Resize(e)
+	for i := e.states.Len() - 1; i >= 0; i-- {
+		e.states.GetSlice()[i].Resize(e)
 	}
 }
 
