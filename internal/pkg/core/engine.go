@@ -21,7 +21,7 @@ func NewEngine(cfg Config) (*Engine, error) {
 	rl.SetConfigFlags(cfg.WinMode)
 
 	// window dimensions don't matter if fullscreen
-	if (cfg.WinW <= 0 || cfg.WinH <= 0) && cfg.WinMode != rl.FlagFullscreenMode {
+	if (cfg.WinW <= 0 || cfg.WinH <= 0) && (cfg.WinMode&rl.FlagFullscreenMode) == 0 {
 		return nil, errors.New("bad window size")
 	}
 
