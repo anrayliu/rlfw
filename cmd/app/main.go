@@ -1,14 +1,14 @@
 package main
 
 import (
-	app "anray/raylib-game/internal/app/raylib_game"
-	core "anray/raylib-game/internal/pkg/core"
+	app "anray/raylib-game/internal/app"
+	rsky "anray/raylib-game/pkg/rsky"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 func main() {
-	engine, err := core.NewEngine(core.Config{
+	engine, err := rsky.NewEngine(rsky.Config{
 		WinW:     800,
 		WinH:     600,
 		WinMode:  0,
