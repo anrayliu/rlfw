@@ -1,4 +1,4 @@
-package core
+package rlfw
 
 type Stack[T any] struct {
 	data []T

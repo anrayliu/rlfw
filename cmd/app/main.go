@@ -1,18 +1,18 @@
 package main
 
 import (
-	app "anray/raylib-game/internal/app"
-	rsky "anray/raylib-game/pkg/rsky"
+	app "github.com/anrayliu/rlfw/internal/app"
+	rlfw "github.com/anrayliu/rlfw/pkg/rlfw"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 func main() {
-	engine, err := rsky.NewEngine(rsky.Config{
+	engine, err := rlfw.NewEngine(rlfw.Config{
 		WinW:     800,
 		WinH:     600,
 		WinMode:  0,
-		Name:     "test",
+		Name:     "example",
 		Fps:      60,
 		LogLevel: rl.LogDebug,
 	})

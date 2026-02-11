@@ -1,9 +1,9 @@
-package raylib_game
+package app
 
 import (
-	rsky "anray/raylib-game/pkg/rsky"
+	rlfw "github.com/anrayliu/rlfw/pkg/rlfw"
 )
 
 type Game struct {
-	rsky.DefaultState
+	rlfw.DefaultState
 }

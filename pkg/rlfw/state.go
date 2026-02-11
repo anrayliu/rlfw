@@ -1,4 +1,4 @@
-package core
+package rlfw
 
 type State interface {
 	Enter(e *Engine)

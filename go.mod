@@ -1,4 +1,4 @@
-module anray/raylib-game
+module github.com/anrayliu/rlfw
 
 go 1.22.2
 
