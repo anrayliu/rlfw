@@ -7,14 +7,6 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-type State interface {
-	Enter(e *Engine)
-	Exit(e *Engine)
-	Update(e *Engine)
-	Draw(e *Engine)
-	Resize(e *Engine)
-}
-
 func NewEngine(cfg Config) (*Engine, error) {
 	rl.SetTraceLogLevel(cfg.LogLevel)
 	rl.SetTargetFPS(cfg.Fps)
