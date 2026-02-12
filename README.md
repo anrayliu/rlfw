@@ -51,8 +51,8 @@ func (g *Game) Draw(e *rlfw.Engine) {
 func (g *Game) Resize(e *rlfw.Engine) {
 }
 ```
-Start new states with `e.Run(&MyState{})`. Exit from the current state with `e.Stop()`. 
-This returns to the previous state in the stack. To exit from all states, use `e.Quit()`.
+Start new states with `e.Run(&MyState{})`. Exit from the current state with `e.QuitState()`. 
+This returns to the previous state in the stack. To exit from all states, use `e.QuitApp()`.
 
 On app start, images (`.png`, `.jpg`) and fonts (`.otf`, `.ttf`) from the `assets` directory will be automatically loaded.
 Inside a state, they can be accessed with `e.Resources.GetImg(name)`, `e.Resources.GetTexture(name)`, and `e.Resources.GetFont(name)`.
