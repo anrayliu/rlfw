@@ -34,7 +34,8 @@ func NewEngine(cfg Config) (*Engine, error) {
 
 		quit:    false,
 		quitAll: false,
-		states:  NewStack[State](),
+
+		states: []State{},
 	}, nil
 }
 
@@ -42,7 +43,7 @@ type Engine struct {
 	Resources *Resources
 	Cfg       Config
 
-	states *Stack[State]
+	states []State
 
 	// internal state management vars
 	quit    bool
@@ -50,20 +51,20 @@ type Engine struct {
 }
 
 func (e *Engine) resizeStates() {
-	for i := e.states.Len() - 1; i >= 0; i-- {
-		e.states.GetSlice()[i].Resize(e)
+	for i := len(e.states) - 1; i >= 0; i-- {
+		e.states[i].Resize(e)
 	}
 }
 
 func (e *Engine) Run(state State) {
-	e.states.Push(state)
-	if e.states.Len() == 1 {
+	e.states = append(e.states, state)
+	if len(e.states) == 1 {
 		defer rl.CloseWindow()
 		defer e.Resources.cleanUp()
 	}
 	defer func() {
 		state.Exit(e)
-		e.states.Pop()
+		e.states = e.states[:len(e.states)-1] // pop from end of slice
 
 		if !e.quitAll {
 			e.quit = false
