@@ -171,7 +171,11 @@ func (r *Resources) LoadDir(dir string) error {
 		}
 		ext := filepath.Ext(path)
 		if ext == ".png" || ext == ".jpg" {
-			return r.LoadImg(path)
+			err := r.LoadImg(path)
+			if err != nil {
+				return err
+			}
+			return r.LoadTexture(path)
 		}
 		if ext == ".ttf" || ext == ".otf" {
 			return r.LoadFont(path)
