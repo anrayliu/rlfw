@@ -34,6 +34,18 @@ func newResources() *Resources {
 	}
 }
 
+func (r *Resources) cleanUp() {
+	for _, img := range r.images {
+		rl.UnloadImage(img)
+	}
+	for _, texture := range r.textures {
+		rl.UnloadTexture(texture)
+	}
+	for _, font := range r.fonts {
+		rl.UnloadFont(font)
+	}
+}
+
 func splitFileName(path string) (string, string, error) {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -119,16 +131,4 @@ func (r *Resources) GetFont(name string) rl.Font {
 		return rl.GetFontDefault()
 	}
 	return font
-}
-
-func (r *Resources) cleanUp() {
-	for _, img := range r.images {
-		rl.UnloadImage(img)
-	}
-	for _, texture := range r.textures {
-		rl.UnloadTexture(texture)
-	}
-	for _, font := range r.fonts {
-		rl.UnloadFont(font)
-	}
 }

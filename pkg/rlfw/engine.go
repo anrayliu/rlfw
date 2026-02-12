@@ -74,7 +74,7 @@ func (e *Engine) Run(state State) {
 
 	for {
 		if rl.WindowShouldClose() {
-			e.QuitAll()
+			e.Quit()
 		} else if e.quit {
 			break
 		}
@@ -95,11 +95,11 @@ func (e *Engine) Run(state State) {
 	}
 }
 
-func (e *Engine) Quit() {
+func (e *Engine) Stop() {
 	e.quit = true
 }
 
-func (e *Engine) QuitAll() {
+func (e *Engine) Quit() {
 	e.quitAll = true
-	e.Quit()
+	e.Stop()
 }
