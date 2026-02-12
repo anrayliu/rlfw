@@ -21,6 +21,7 @@ type Resources struct {
 }
 
 func newResources() *Resources {
+	// generate default image for missing assets
 	tmp := rl.GenImageColor(256, 256, rl.Red)
 	rl.ImageDrawTextEx(tmp, rl.Vector2{X: 0, Y: 0}, rl.GetFontDefault(), "missing resource", 25, 1, rl.Black)
 
@@ -66,11 +67,66 @@ func (r *Resources) LoadImg(path string) error {
 
 	if ext == ".png" || ext == ".jpg" {
 		r.images[base] = rl.LoadImage(path)
-		r.textures[base] = rl.LoadTextureFromImage(r.images[base])
 		return nil
 	}
 
 	return errors.New("unsupported file format")
+}
+
+func (r *Resources) UnloadImg(pathOrName string) error {
+	img, ok := r.images[pathOrName]
+	if !ok {
+		base, _, err := splitFileName(pathOrName)
+		if err != nil {
+			return err
+		}
+		img, ok = r.images[base]
+		if !ok {
+			return errors.New("no image to unload")
+		}
+	}
+
+	rl.UnloadImage(img)
+
+	return nil
+}
+
+func (r *Resources) LoadTexture(path string) error {
+	base, ext, err := splitFileName(path)
+	if err != nil {
+		return err
+	}
+
+	if ext == ".png" || ext == ".jpg" {
+		img, ok := r.images[base]
+		if !ok {
+			img = rl.LoadImage(path)
+			defer rl.UnloadImage(img)
+		}
+
+		r.textures[base] = rl.LoadTextureFromImage(img)
+		return nil
+	}
+
+	return errors.New("unsupported file format")
+}
+
+func (r *Resources) UnloadTexture(pathOrName string) error {
+	texture, ok := r.textures[pathOrName]
+	if !ok {
+		base, _, err := splitFileName(pathOrName)
+		if err != nil {
+			return err
+		}
+		texture, ok = r.textures[base]
+		if !ok {
+			return errors.New("no texture to unload")
+		}
+	}
+
+	rl.UnloadTexture(texture)
+
+	return nil
 }
 
 func (r *Resources) LoadFont(path string) error {
@@ -85,6 +141,24 @@ func (r *Resources) LoadFont(path string) error {
 	}
 
 	return errors.New("unsupported file format")
+}
+
+func (r *Resources) UnloadFont(pathOrName string) error {
+	font, ok := r.fonts[pathOrName]
+	if !ok {
+		base, _, err := splitFileName(pathOrName)
+		if err != nil {
+			return err
+		}
+		font, ok = r.fonts[base]
+		if !ok {
+			return errors.New("no font to unload")
+		}
+	}
+
+	rl.UnloadFont(font)
+
+	return nil
 }
 
 func (r *Resources) LoadDir(dir string) error {
