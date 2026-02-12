@@ -65,6 +65,13 @@ func (r *Resources) LoadImg(path string) error {
 		return err
 	}
 
+	_, ok := r.images[base]
+	if ok {
+		// already loaded, but this is not an error
+		// see readme for api design philosophy
+		return nil
+	}
+
 	if ext == ".png" || ext == ".jpg" {
 		r.images[base] = rl.LoadImage(path)
 		return nil
@@ -82,7 +89,9 @@ func (r *Resources) UnloadImg(pathOrName string) error {
 		}
 		img, ok = r.images[base]
 		if !ok {
-			return errors.New("no image to unload")
+			// nothing to unload, but this is not an error
+			// see readme for api design philosophy
+			return nil
 		}
 	}
 
@@ -97,9 +106,17 @@ func (r *Resources) LoadTexture(path string) error {
 		return err
 	}
 
+	_, ok := r.textures[base]
+	if ok {
+		// already loaded, but this is not an error
+		// see readme for api design philosophy
+		return nil
+	}
+
 	if ext == ".png" || ext == ".jpg" {
 		img, ok := r.images[base]
 		if !ok {
+			// temporarily load image to create texture with
 			img = rl.LoadImage(path)
 			defer rl.UnloadImage(img)
 		}
@@ -120,7 +137,9 @@ func (r *Resources) UnloadTexture(pathOrName string) error {
 		}
 		texture, ok = r.textures[base]
 		if !ok {
-			return errors.New("no texture to unload")
+			// nothing to unload, but this is not an error
+			// see readme for api design philosophy
+			return nil
 		}
 	}
 
@@ -133,6 +152,13 @@ func (r *Resources) LoadFont(path string) error {
 	base, ext, err := splitFileName(path)
 	if err != nil {
 		return err
+	}
+
+	_, ok := r.fonts[base]
+	if ok {
+		// already loaded, but this is not an error
+		// see readme for api design philosophy
+		return nil
 	}
 
 	if ext == ".ttf" || ext == ".otf" {
@@ -152,7 +178,9 @@ func (r *Resources) UnloadFont(pathOrName string) error {
 		}
 		font, ok = r.fonts[base]
 		if !ok {
-			return errors.New("no font to unload")
+			// nothing to unload, but this is not an error
+			// see readme for api design philosophy
+			return nil
 		}
 	}
 
@@ -171,42 +199,42 @@ func (r *Resources) LoadDir(dir string) error {
 		}
 		ext := filepath.Ext(path)
 		if ext == ".png" || ext == ".jpg" {
+			log.Printf("loading image: %s", path)
 			err := r.LoadImg(path)
 			if err != nil {
 				return err
 			}
+			log.Printf("loading texture: %s", path)
 			return r.LoadTexture(path)
 		}
 		if ext == ".ttf" || ext == ".otf" {
+			log.Printf("loading font: %s", path)
 			return r.LoadFont(path)
 		}
 		return nil
 	})
 }
 
-func (r *Resources) GetTexture(name string) rl.Texture2D {
+func (r *Resources) GetTexture(name string) (rl.Texture2D, bool) {
 	texture, ok := r.textures[name]
 	if !ok {
-		log.Printf("texture not found: %s", name)
-		return r.defaultTexture
+		return r.defaultTexture, false
 	}
-	return texture
+	return texture, true
 }
 
-func (r *Resources) GetImg(name string) *rl.Image {
+func (r *Resources) GetImg(name string) (*rl.Image, bool) {
 	img, ok := r.images[name]
 	if !ok {
-		log.Printf("image not found: %s", name)
-		return r.defaultImg
+		return r.defaultImg, false
 	}
-	return img
+	return img, true
 }
 
-func (r *Resources) GetFont(name string) rl.Font {
+func (r *Resources) GetFont(name string) (rl.Font, bool) {
 	font, ok := r.fonts[name]
 	if !ok {
-		log.Printf("font not found: %s", name)
-		return rl.GetFontDefault()
+		return rl.GetFontDefault(), false
 	}
-	return font
+	return font, true
 }
