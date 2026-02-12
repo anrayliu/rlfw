@@ -11,3 +11,15 @@ type Config struct {
 	LogLevel   rl.TraceLogLevel
 	LoadAssets bool
 }
+
+func DefaultConfig() Config {
+	return Config{
+		WinW:       800,
+		WinH:       600,
+		WinMode:    0,
+		Name:       "example",
+		Fps:        60,
+		LogLevel:   rl.LogDebug,
+		LoadAssets: true,
+	}
+}
