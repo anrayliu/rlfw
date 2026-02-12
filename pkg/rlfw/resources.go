@@ -193,6 +193,7 @@ func (r *Resources) LoadDir(dir string) error {
 	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			log.Printf("error while walking over %s: %s", path, err)
+			return nil
 		}
 		if entry.IsDir() {
 			return nil
@@ -219,6 +220,7 @@ func (r *Resources) UnloadDir(dir string) error {
 	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			log.Printf("error while walking over %s: %s", path, err)
+			return nil
 		}
 		if entry.IsDir() {
 			return nil
