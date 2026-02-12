@@ -21,9 +21,11 @@ func NewEngine(cfg Config) (*Engine, error) {
 	rl.InitWindow(cfg.WinW, cfg.WinH, cfg.Name)
 
 	resources := newResources()
-	err := resources.LoadDir("assets")
-	if err != nil {
-		log.Printf("error when loading assets folder: %s", err)
+	if cfg.LoadAssets {
+		err := resources.LoadDir("assets")
+		if err != nil {
+			log.Printf("error when loading assets folder: %s", err)
+		}
 	}
 
 	return &Engine{

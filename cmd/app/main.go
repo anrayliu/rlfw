@@ -9,12 +9,13 @@ import (
 
 func main() {
 	engine, err := rlfw.NewEngine(rlfw.Config{
-		WinW:     800,
-		WinH:     600,
-		WinMode:  0,
-		Name:     "example",
-		Fps:      60,
-		LogLevel: rl.LogDebug,
+		WinW:       800,
+		WinH:       600,
+		WinMode:    0,
+		Name:       "example",
+		Fps:        60,
+		LogLevel:   rl.LogDebug,
+		LoadAssets: true,
 	})
 	if err != nil {
 		panic(err)
