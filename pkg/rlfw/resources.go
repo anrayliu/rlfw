@@ -198,7 +198,8 @@ func (r *Resources) LoadDir(dir string) error {
 			return nil
 		}
 		ext := filepath.Ext(path)
-		if ext == ".png" || ext == ".jpg" {
+		switch ext {
+		case ".png", ".jpg":
 			log.Printf("loading image: %s", path)
 			err := r.LoadImg(path)
 			if err != nil {
@@ -206,10 +207,30 @@ func (r *Resources) LoadDir(dir string) error {
 			}
 			log.Printf("loading texture: %s", path)
 			return r.LoadTexture(path)
-		}
-		if ext == ".ttf" || ext == ".otf" {
+		case ".ttf", ".otf":
 			log.Printf("loading font: %s", path)
 			return r.LoadFont(path)
+		}
+		return nil
+	})
+}
+
+func (r *Resources) UnloadDir(dir string) error {
+	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			log.Printf("error while walking over %s: %s", path, err)
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		ext := filepath.Ext(path)
+		// errors shouldn't be possible, so throw away
+		switch ext {
+		case ".png", ".jpg":
+			_ = r.UnloadImg(path)
+			_ = r.UnloadTexture(path)
+		case ".ttf", ".otf":
+			_ = r.UnloadFont(path)
 		}
 		return nil
 	})
