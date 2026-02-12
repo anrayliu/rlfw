@@ -1,7 +1,7 @@
 package rlfw
 
 import (
-	"errors"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -50,7 +50,7 @@ func (r *Resources) cleanUp() {
 func splitFileName(path string) (string, string, error) {
 	_, err := os.Stat(path)
 	if err != nil {
-		return "", "", errors.New("file does not exist")
+		return "", "", fmt.Errorf("file %s does not exist", path)
 	}
 
 	ext := filepath.Ext(path)
@@ -77,7 +77,7 @@ func (r *Resources) LoadImg(path string) error {
 		return nil
 	}
 
-	return errors.New("unsupported file format")
+	return fmt.Errorf("unsupported file format: %s", ext)
 }
 
 func (r *Resources) UnloadImg(pathOrName string) error {
@@ -125,7 +125,7 @@ func (r *Resources) LoadTexture(path string) error {
 		return nil
 	}
 
-	return errors.New("unsupported file format")
+	return fmt.Errorf("unsupported file format: %s", ext)
 }
 
 func (r *Resources) UnloadTexture(pathOrName string) error {
@@ -166,7 +166,7 @@ func (r *Resources) LoadFont(path string) error {
 		return nil
 	}
 
-	return errors.New("unsupported file format")
+	return fmt.Errorf("unsupported file format: %s", ext)
 }
 
 func (r *Resources) UnloadFont(pathOrName string) error {
