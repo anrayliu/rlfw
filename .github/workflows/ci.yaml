@@ -20,7 +20,7 @@ jobs:
         run: go mod tidy -v
 
       - name: Install Raylib
-        run: apt-get install libgl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+        run: sudo apt-get install libgl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev libwayland-dev libxkbcommon-dev
 
       - name: Run Go tests
         run: go test -v -race ./...
