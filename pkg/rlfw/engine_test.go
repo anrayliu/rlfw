@@ -120,33 +120,92 @@ func TestQuitApp(t *testing.T) {
 	assert.True(t, engine.quitAll)
 }
 
-type testState struct {
+type testEventsState struct {
 	eventsTriggered int
 }
 
-func (s *testState) Draw(e *Engine) {
+func (s *testEventsState) Draw(e *Engine) {
 	s.eventsTriggered++
 	e.QuitState()
 }
-func (s *testState) Update(e *Engine) {
+func (s *testEventsState) Update(e *Engine) {
 	s.eventsTriggered++
 	e.resizeStates()
 }
-func (s *testState) Enter(e *Engine) {
+func (s *testEventsState) Enter(e *Engine) {
 	s.eventsTriggered++
 }
-func (s *testState) Exit(e *Engine) {
+func (s *testEventsState) Exit(e *Engine) {
 	s.eventsTriggered++
 }
-func (s *testState) Resize(e *Engine) {
+func (s *testEventsState) Resize(e *Engine) {
 	s.eventsTriggered++
 }
 
 func TestCallbacks(t *testing.T) {
 	engine := createTestEngine()
-	state := &testState{}
+	state := &testEventsState{}
 
 	engine.Run(state)
 
 	assert.Equal(t, state.eventsTriggered, 5)
+}
+
+type testStackState struct {
+	DefaultState
+	id int
+	t  *testing.T
+}
+
+func (s *testStackState) Enter(e *Engine) {
+	if s.id < 10 {
+		e.Run(&testStackState{
+			id: s.id + 1,
+			t:  s.t,
+		})
+	}
+}
+
+func (s *testStackState) Update(e *Engine) {
+	assert.Equal(s.t, len(e.states), s.id)
+	e.QuitState()
+}
+
+func TestStateMachine(t *testing.T) {
+	engine := createTestEngine()
+
+	engine.Run(&testStackState{
+		id: 1,
+		t:  t,
+	})
+
+}
+
+type testQuitAllState struct {
+	DefaultState
+	id int
+	t  *testing.T
+}
+
+func (s *testQuitAllState) Enter(e *Engine) {
+	if s.id < 10 {
+		e.Run(&testQuitAllState{
+			id: s.id + 1,
+			t:  s.t,
+		})
+	}
+}
+
+func (s *testQuitAllState) Update(e *Engine) {
+	assert.Equal(s.t, s.id, 10)
+	e.QuitApp()
+}
+
+func TestQuitAllStates(t *testing.T) {
+	engine := createTestEngine()
+
+	engine.Run(&testQuitAllState{
+		id: 1,
+		t:  t,
+	})
 }
