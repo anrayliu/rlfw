@@ -28,7 +28,8 @@ func TestNewResources(t *testing.T) {
 func TestLoadDir(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadDir(dirPath)
+	err := r.LoadDir(dirPath)
+	assert.Nil(t, err)
 
 	assert.Equal(t, len(r.images), 1)
 	assert.Equal(t, len(r.textures), 1)
@@ -44,8 +45,11 @@ func TestLoadDir(t *testing.T) {
 func TestUnloadDir(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadDir(dirPath)
-	r.UnloadDir(dirPath)
+	err := r.LoadDir(dirPath)
+	assert.Nil(t, err)
+
+	err = r.UnloadDir(dirPath)
+	assert.Nil(t, err)
 
 	assert.Equal(t, len(r.images), 0)
 	assert.Equal(t, len(r.textures), 0)
@@ -65,7 +69,8 @@ func TestSplitFileName(t *testing.T) {
 func TestLoadImg(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadImg(applePath)
+	err := r.LoadImg(applePath)
+	assert.Nil(t, err)
 
 	assert.Equal(t, len(r.images), 1)
 
@@ -75,9 +80,6 @@ func TestLoadImg(t *testing.T) {
 	assert.Equal(t, image.Width, int32(256))
 	assert.Equal(t, image.Height, int32(256))
 
-	err := r.LoadImg(applePath)
-	assert.Nil(t, err)
-
 	err = r.LoadImg(fontpath)
 	assert.NotNil(t, err)
 }
@@ -85,18 +87,22 @@ func TestLoadImg(t *testing.T) {
 func TestUnloadImg(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadImg(applePath)
+	err := r.LoadImg(applePath)
+	assert.Nil(t, err)
 
-	err := r.UnloadImg(applePath)
+	err = r.UnloadImg(applePath)
+	assert.Nil(t, err)
 
 	_, ok := r.images["apple"]
 	assert.False(t, ok)
 
 	assert.Equal(t, len(r.images), 0)
 
-	r.LoadImg(applePath)
+	err = r.LoadImg(applePath)
+	assert.Nil(t, err)
 
-	r.UnloadImg("apple")
+	err = r.UnloadImg("apple")
+	assert.Nil(t, err)
 
 	_, ok = r.images["apple"]
 	assert.False(t, ok)
@@ -110,7 +116,8 @@ func TestUnloadImg(t *testing.T) {
 func TestLoadTexture(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadTexture(applePath)
+	err := r.LoadTexture(applePath)
+	assert.Nil(t, err)
 
 	assert.Equal(t, len(r.textures), 1)
 
@@ -120,9 +127,6 @@ func TestLoadTexture(t *testing.T) {
 	assert.Equal(t, texture.Width, int32(256))
 	assert.Equal(t, texture.Height, int32(256))
 
-	err := r.LoadTexture(applePath)
-	assert.Nil(t, err)
-
 	err = r.LoadTexture(fontpath)
 	assert.NotNil(t, err)
 }
@@ -130,18 +134,22 @@ func TestLoadTexture(t *testing.T) {
 func TestUnloadTexture(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadTexture(applePath)
+	err := r.LoadTexture(applePath)
+	assert.Nil(t, err)
 
-	err := r.UnloadTexture(applePath)
+	err = r.UnloadTexture(applePath)
+	assert.Nil(t, err)
 
 	_, ok := r.textures["apple"]
 	assert.False(t, ok)
 
 	assert.Equal(t, len(r.textures), 0)
 
-	r.LoadTexture(applePath)
+	err = r.LoadTexture(applePath)
+	assert.Nil(t, err)
 
-	r.UnloadTexture("apple")
+	err = r.UnloadTexture("apple")
+	assert.Nil(t, err)
 
 	_, ok = r.textures["apple"]
 	assert.False(t, ok)
@@ -155,7 +163,8 @@ func TestUnloadTexture(t *testing.T) {
 func TestLoadFont(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadFont(fontpath)
+	err := r.LoadFont(fontpath)
+	assert.Nil(t, err)
 
 	assert.Equal(t, len(r.fonts), 1)
 
@@ -168,18 +177,22 @@ func TestLoadFont(t *testing.T) {
 func TestUnloadFont(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadFont(fontpath)
+	err := r.LoadFont(fontpath)
+	assert.Nil(t, err)
 
-	err := r.UnloadFont(fontpath)
+	err = r.UnloadFont(fontpath)
+	assert.Nil(t, err)
 
 	_, ok := r.fonts["arial"]
 	assert.False(t, ok)
 
 	assert.Equal(t, len(r.fonts), 0)
 
-	r.LoadFont(fontpath)
+	err = r.LoadFont(fontpath)
+	assert.Nil(t, err)
 
-	r.UnloadFont("arial")
+	err = r.UnloadFont("arial")
+	assert.Nil(t, err)
 
 	_, ok = r.fonts["arial"]
 	assert.False(t, ok)
@@ -193,7 +206,8 @@ func TestUnloadFont(t *testing.T) {
 func TestCleanUp(t *testing.T) {
 	e := createTestEngine()
 
-	e.Resources.LoadDir(dirPath)
+	err := e.Resources.LoadDir(dirPath)
+	assert.Nil(t, err)
 
 	e.Run(&testDefaultState{})
 
@@ -207,7 +221,8 @@ func TestCleanUp(t *testing.T) {
 func TestGetImg(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadImg(applePath)
+	err := r.LoadImg(applePath)
+	assert.Nil(t, err)
 
 	img, exists := r.GetImg("apple")
 
@@ -222,7 +237,8 @@ func TestGetImg(t *testing.T) {
 func TestGetTexture(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadTexture(applePath)
+	err := r.LoadTexture(applePath)
+	assert.Nil(t, err)
 
 	texture, exists := r.GetTexture("apple")
 
@@ -237,7 +253,8 @@ func TestGetTexture(t *testing.T) {
 func TestGetFont(t *testing.T) {
 	r := createTestEngine().Resources
 
-	r.LoadFont(fontpath)
+	err := r.LoadFont(fontpath)
+	assert.Nil(t, err)
 
 	font, exists := r.GetFont("arial")
 
