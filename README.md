@@ -4,6 +4,7 @@ Mini raylib-go framework that manages some inconvenient things for you. No extra
 I plan on using this for my own projects, so I will update it with functionality as I discover new use cases.
 
 ## Quickstart
+See `example/main.go` for a super quick starter template.
 
 All the boilerplate of an application is handled by the `Engine`. 
 It can be configured with a `Config` struct found in the `main` function.
@@ -84,5 +85,5 @@ calls to load won't return an error because the function is idempotent. There is
 
 3. Functions should always try to keep expected behaviour.
 
-Take the case when a user is trying to get a texture. If that texture does not exist, devs should be notified through
-an error (in this case, a boolean instead). However, they are still expecting a texture to be returned, so a default texture is returned.
+Take the case when a user is trying to get a texture. Even if that texture does not exist, devs are still expecting a texture 
+to be returned, so a default texture is returned.
