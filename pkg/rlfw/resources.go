@@ -36,14 +36,16 @@ func newResources() *Resources {
 }
 
 func (r *Resources) cleanUp() {
-	for _, img := range r.images {
-		rl.UnloadImage(img)
+	for name := range r.images {
+		r.UnloadImg(name)
 	}
-	for _, texture := range r.textures {
-		rl.UnloadTexture(texture)
+
+	for name := range r.textures {
+		r.UnloadTexture(name)
 	}
-	for _, font := range r.fonts {
-		rl.UnloadFont(font)
+
+	for name := range r.fonts {
+		r.UnloadFont(name)
 	}
 }
 
@@ -88,6 +90,7 @@ func (r *Resources) UnloadImg(pathOrName string) error {
 			return err
 		}
 		img, ok = r.images[base]
+		pathOrName = base
 		if !ok {
 			// nothing to unload, but this is not an error
 			// see readme for api design philosophy
@@ -96,6 +99,7 @@ func (r *Resources) UnloadImg(pathOrName string) error {
 	}
 
 	rl.UnloadImage(img)
+	delete(r.images, pathOrName)
 
 	return nil
 }
@@ -136,6 +140,7 @@ func (r *Resources) UnloadTexture(pathOrName string) error {
 			return err
 		}
 		texture, ok = r.textures[base]
+		pathOrName = base
 		if !ok {
 			// nothing to unload, but this is not an error
 			// see readme for api design philosophy
@@ -144,6 +149,7 @@ func (r *Resources) UnloadTexture(pathOrName string) error {
 	}
 
 	rl.UnloadTexture(texture)
+	delete(r.textures, pathOrName)
 
 	return nil
 }
@@ -177,6 +183,7 @@ func (r *Resources) UnloadFont(pathOrName string) error {
 			return err
 		}
 		font, ok = r.fonts[base]
+		pathOrName = base
 		if !ok {
 			// nothing to unload, but this is not an error
 			// see readme for api design philosophy
@@ -185,6 +192,7 @@ func (r *Resources) UnloadFont(pathOrName string) error {
 	}
 
 	rl.UnloadFont(font)
+	delete(r.fonts, pathOrName)
 
 	return nil
 }
