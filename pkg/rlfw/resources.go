@@ -11,6 +11,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+// Resources stores loaded images, textures, and fonts.
 type Resources struct {
 	images   map[string]*rl.Image
 	textures map[string]rl.Texture2D
@@ -61,6 +62,8 @@ func splitFileName(path string) (string, string, error) {
 	return filename, ext, nil
 }
 
+// LoadImg loads an image from the given file path and stores it.
+// Supported file formats are .png and .jpg.
 func (r *Resources) LoadImg(path string) error {
 	base, ext, err := splitFileName(path)
 	if err != nil {
@@ -82,6 +85,7 @@ func (r *Resources) LoadImg(path string) error {
 	return fmt.Errorf("unsupported file format: %s", ext)
 }
 
+// UnloadImg deletes the stored image by file path or resource name.
 func (r *Resources) UnloadImg(pathOrName string) error {
 	img, ok := r.images[pathOrName]
 	if !ok {
@@ -104,6 +108,8 @@ func (r *Resources) UnloadImg(pathOrName string) error {
 	return nil
 }
 
+// LoadTexture loads a texture from the given file path and stores it.
+// Supported file formats are .png and .jpg.
 func (r *Resources) LoadTexture(path string) error {
 	base, ext, err := splitFileName(path)
 	if err != nil {
@@ -132,6 +138,7 @@ func (r *Resources) LoadTexture(path string) error {
 	return fmt.Errorf("unsupported file format: %s", ext)
 }
 
+// UnloadTexture deletes the stored texture by file path or resource name.
 func (r *Resources) UnloadTexture(pathOrName string) error {
 	texture, ok := r.textures[pathOrName]
 	if !ok {
@@ -154,6 +161,8 @@ func (r *Resources) UnloadTexture(pathOrName string) error {
 	return nil
 }
 
+// LoadFont loads a font from the given file path and stores it.
+// Supported file formats are .ttf and .otf.
 func (r *Resources) LoadFont(path string) error {
 	base, ext, err := splitFileName(path)
 	if err != nil {
@@ -175,6 +184,7 @@ func (r *Resources) LoadFont(path string) error {
 	return fmt.Errorf("unsupported file format: %s", ext)
 }
 
+// UnloadFont deletes the stored font by file path or resource name.
 func (r *Resources) UnloadFont(pathOrName string) error {
 	font, ok := r.fonts[pathOrName]
 	if !ok {
@@ -197,6 +207,7 @@ func (r *Resources) UnloadFont(pathOrName string) error {
 	return nil
 }
 
+// LoadDir recursively loads all supported resources from the given directory.
 func (r *Resources) LoadDir(dir string) error {
 	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
@@ -224,6 +235,7 @@ func (r *Resources) LoadDir(dir string) error {
 	})
 }
 
+// UnloadDir recursively unloads all resources loaded from the given directory.
 func (r *Resources) UnloadDir(dir string) error {
 	return filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
@@ -246,6 +258,8 @@ func (r *Resources) UnloadDir(dir string) error {
 	})
 }
 
+// GetTexture retrieves a texture by name.
+// Returns a second value: a bool that's true if the referenced texture exists.
 func (r *Resources) GetTexture(name string) (rl.Texture2D, bool) {
 	texture, ok := r.textures[name]
 	if !ok {
@@ -254,6 +268,8 @@ func (r *Resources) GetTexture(name string) (rl.Texture2D, bool) {
 	return texture, true
 }
 
+// GetImg retrieves an image by name.
+// Returns a second value: a bool that's true if the referenced image exists.
 func (r *Resources) GetImg(name string) (*rl.Image, bool) {
 	img, ok := r.images[name]
 	if !ok {
@@ -262,6 +278,8 @@ func (r *Resources) GetImg(name string) (*rl.Image, bool) {
 	return img, true
 }
 
+// GetFont retrieves a font by name.
+// Returns a second value: a bool that's true if the referenced font exists.
 func (r *Resources) GetFont(name string) (rl.Font, bool) {
 	font, ok := r.fonts[name]
 	if !ok {

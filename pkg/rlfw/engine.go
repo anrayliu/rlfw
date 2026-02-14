@@ -7,6 +7,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+// NewEngine creates and returns an Engine with the given configuration.
 func NewEngine(cfg Config) (*Engine, error) {
 	rl.SetTraceLogLevel(cfg.LogLevel)
 	rl.SetTargetFPS(cfg.Fps)
@@ -38,6 +39,8 @@ func NewEngine(cfg Config) (*Engine, error) {
 	}, nil
 }
 
+// Engine is the core driver of rlfw.
+// It handles application boilerplate, loads and stores resources, and manages state.
 type Engine struct {
 	Resources *Resources
 	Cfg       Config
@@ -55,6 +58,7 @@ func (e *Engine) resizeStates() {
 	}
 }
 
+// Run places the given state on the stack and passes control to it.
 func (e *Engine) Run(state State) {
 	e.states = append(e.states, state)
 	if len(e.states) == 1 {
@@ -63,7 +67,7 @@ func (e *Engine) Run(state State) {
 	}
 	defer func() {
 		state.Exit(e)
-		e.states = e.states[:len(e.states)-1] // pop from end of slice
+		e.states = e.states[:len(e.states)-1]
 
 		if !e.quitAll {
 			e.quit = false
@@ -95,10 +99,12 @@ func (e *Engine) Run(state State) {
 	}
 }
 
+// QuitState exits from the current state, passing control back to the previous state.
 func (e *Engine) QuitState() {
 	e.quit = true
 }
 
+// QuitApp exits from all states, terminating the engine.
 func (e *Engine) QuitApp() {
 	e.quitAll = true
 	e.QuitState()

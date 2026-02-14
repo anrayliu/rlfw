@@ -1,5 +1,6 @@
 package rlfw
 
+// State is the interface that structs must implement to run on the engine.
 type State interface {
 	Enter(e *Engine)
 	Exit(e *Engine)
@@ -8,6 +9,7 @@ type State interface {
 	Resize(e *Engine)
 }
 
+// DefaultState is a struct with empty implementations for each required state function.
 type DefaultState struct{}
 
 func (s *DefaultState) Enter(e *Engine) {
