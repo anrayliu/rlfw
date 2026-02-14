@@ -1,12 +1,12 @@
-# rlfw v0.1.0
-Mini Go-RayLib framework that manages some inconvenient things for you. No dependencies other than raylib. This framework is designed to assist raylib, not replace it. I tried to avoid abstraction for the sake of abstraction, and only added features if it actually made the dev experience better.
+# rlfw
+Mini raylib-go framework that manages some inconvenient things for you. No extra dependencies. This framework is designed to assist raylib, not replace it. I avoided abstractions for the sake of abstraction, and only added features if it actually made the dev experience better.
 
 I plan on using this for my own projects, so I will update it with functionality as I discover new use cases.
 
 ## Quickstart
 
 All the boilerplate of an application is handled by the `Engine`. 
-It can be configured with the `Config` struct found in the `main` function.
+It can be configured with a `Config` struct found in the `main` function.
 
 ```
 engine, err := rlfw.NewEngine(rlfw.Config{
@@ -26,38 +26,50 @@ if err != nil {
 ```
 type Game struct{}
 
-// init logic
-
 func (g *Game) Enter(e *rlfw.Engine) {
+	// init logic
 }
-
-// clean up logic
 
 func (g *Game) Exit(e *rlfw.Engine) {
+	// clean up logic
 }
-
-// main app logic, called every frame
 
 func (g *Game) Update(e *rlfw.Engine) {
+	// main app logic, called every frame
 }
-
-// render app, called after Update
 
 func (g *Game) Draw(e *rlfw.Engine) {
+	// render app, called after Update
 }
 
-// called when window is resized
-
 func (g *Game) Resize(e *rlfw.Engine) {
+	// called when window is resized
 }
 ```
 Start new states with `e.Run(&MyState{})`. Exit from the current state with `e.QuitState()`. 
-This returns to the previous state in the stack. To exit from all states, use `e.QuitApp()`.
+This returns control to the previous state in the stack. To exit from all states, use `e.QuitApp()`.
 
-On app start, images (`.png`, `.jpg`) and fonts (`.otf`, `.ttf`) from the `assets` directory will be automatically loaded.
-Inside a state, they can be accessed with `e.Resources.GetImg(name)`, `e.Resources.GetTexture(name)`, and `e.Resources.GetFont(name)`.
-Further resource loading can be done with `LoadDir(path)`, `LoadImg(path)`, `LoadTexture(path)`, and `LoadFont(path)`. Use their respective
-`Unload` functions to free them. Resources are automatically unloaded when all states end.
+On app start, images (`.png`, `.jpg`) and fonts (`.otf`, `.ttf`) from the `assets` directory will be automatically loaded
+into `engine.Resources`. Since each state function has access to the engine via the parameter `e`, you can easily
+access the loaded resources with `e.Resources.GetImg("apple")`. Note: for convenience, you don't need the extension when
+accessing loaded resources. For example, load a texture with `e.Resources.LoadTexture("pictures/dog.png")`, but
+access it with `e.Resources.GetTexture("dog")`.
+
+Full list of resource functions:
+
+ - `LoadImg(path) error` - Load image file as a raylib image
+ - `LoadTexture(path) error` - Load image file as a raylib texture
+ - `LoadFont(path) error` - Load font file
+ - `LoadDir(path) error` - Automatically load images and fonts in directory
+ - `UnloadImg(nameOrPath) error` - Frees resource stored in memory
+ - `UnloadTexture(nameOrPath) error` - Frees resource stored in memory
+ - `UnloadFont(nameOrPath) error` - Frees resource stored in memory
+ - `UnloadDir(path) error` - Unloads any resources that were loaded from this directory
+ - `GetImg(name) (*rl.Image, bool)` - Return stored image, bool is `true` if image exists
+ - `GetTexture(name) (rl.Texture2D, bool)` - Return stored texture, bool is `true` if texture exists
+ - `GetFont(name) (rl.Font, bool)` - Return stored font, bool is `true` if font exists
+
+Loaded resources are automatically cleaned up when there are no more states.
 
 ## Design Philosophy
 
