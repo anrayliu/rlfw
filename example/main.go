@@ -10,7 +10,10 @@ type Game struct {
 }
 
 func (g *Game) Draw(e *rlfw.Engine) {
+	r := e.Resources
+
 	rl.ClearBackground(rl.Blue)
+	rl.DrawTexture(r.GetTexture("apple"), 0, 0, rl.White)
 }
 
 func main() {
