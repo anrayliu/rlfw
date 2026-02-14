@@ -50,7 +50,7 @@ func (r *Resources) cleanUp() {
 	}
 }
 
-func splitFileName(path string) (string, string, error) {
+func splitFileNameIfExists(path string) (string, string, error) {
 	_, err := os.Stat(path)
 	if err != nil {
 		return "", "", fmt.Errorf("file %s does not exist", path)
@@ -65,7 +65,7 @@ func splitFileName(path string) (string, string, error) {
 // LoadImg loads an image from the given file path and stores it.
 // Supported file formats are .png and .jpg.
 func (r *Resources) LoadImg(path string) error {
-	base, ext, err := splitFileName(path)
+	base, ext, err := splitFileNameIfExists(path)
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func (r *Resources) LoadImg(path string) error {
 func (r *Resources) UnloadImg(pathOrName string) error {
 	img, ok := r.images[pathOrName]
 	if !ok {
-		base, _, err := splitFileName(pathOrName)
+		base, _, err := splitFileNameIfExists(pathOrName)
 		if err != nil {
 			return err
 		}
@@ -111,7 +111,7 @@ func (r *Resources) UnloadImg(pathOrName string) error {
 // LoadTexture loads a texture from the given file path and stores it.
 // Supported file formats are .png and .jpg.
 func (r *Resources) LoadTexture(path string) error {
-	base, ext, err := splitFileName(path)
+	base, ext, err := splitFileNameIfExists(path)
 	if err != nil {
 		return err
 	}
@@ -142,7 +142,7 @@ func (r *Resources) LoadTexture(path string) error {
 func (r *Resources) UnloadTexture(pathOrName string) error {
 	texture, ok := r.textures[pathOrName]
 	if !ok {
-		base, _, err := splitFileName(pathOrName)
+		base, _, err := splitFileNameIfExists(pathOrName)
 		if err != nil {
 			return err
 		}
@@ -164,7 +164,7 @@ func (r *Resources) UnloadTexture(pathOrName string) error {
 // LoadFont loads a font from the given file path and stores it.
 // Supported file formats are .ttf and .otf.
 func (r *Resources) LoadFont(path string) error {
-	base, ext, err := splitFileName(path)
+	base, ext, err := splitFileNameIfExists(path)
 	if err != nil {
 		return err
 	}
@@ -188,7 +188,7 @@ func (r *Resources) LoadFont(path string) error {
 func (r *Resources) UnloadFont(pathOrName string) error {
 	font, ok := r.fonts[pathOrName]
 	if !ok {
-		base, _, err := splitFileName(pathOrName)
+		base, _, err := splitFileNameIfExists(pathOrName)
 		if err != nil {
 			return err
 		}

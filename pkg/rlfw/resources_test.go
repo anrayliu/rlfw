@@ -57,12 +57,12 @@ func TestUnloadDir(t *testing.T) {
 }
 
 func TestSplitFileName(t *testing.T) {
-	base, ext, err := splitFileName(applePath)
+	base, ext, err := splitFileNameIfExists(applePath)
 	assert.Nil(t, err)
 	assert.Equal(t, base, "apple")
 	assert.Equal(t, ext, ".png")
 
-	_, _, err = splitFileName("badpath")
+	_, _, err = splitFileNameIfExists("badpath")
 	assert.NotNil(t, err)
 }
 
