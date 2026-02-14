@@ -19,8 +19,11 @@ jobs:
       - name: Go mod tidy
         run: go mod tidy -v
 
-      - name: Install Raylib
+      - name: Install Raylib dependencies
         run: sudo apt-get install libgl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev libwayland-dev libxkbcommon-dev
 
-      - name: Run Go tests
-        run: go test -p 1 -v ./...
+      - name: Install Xvfb
+        run: sudo apt-get install xvfb
+
+      - name: Run tests in headless
+        run: xvfb-run -s "-screen 0 1024x768x24" go test -p 1 - v ./...
