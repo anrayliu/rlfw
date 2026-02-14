@@ -65,9 +65,9 @@ Full list of resource functions:
  - `UnloadTexture(nameOrPath) error` - Frees resource stored in memory
  - `UnloadFont(nameOrPath) error` - Frees resource stored in memory
  - `UnloadDir(path) error` - Unloads any resources that were loaded from this directory
- - `GetImg(name) (*rl.Image, bool)` - Return stored image, bool is `true` if image exists
- - `GetTexture(name) (rl.Texture2D, bool)` - Return stored texture, bool is `true` if texture exists
- - `GetFont(name) (rl.Font, bool)` - Return stored font, bool is `true` if font exists
+ - `GetImg(name) *rl.Image` - Return stored image
+ - `GetTexture(name) rl.Texture2D` - Return stored texture
+ - `GetFont(name) rl.Font` - Return stored font
 
 Loaded resources are automatically cleaned up when there are no more states.
 

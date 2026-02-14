@@ -224,14 +224,11 @@ func TestGetImg(t *testing.T) {
 	err := r.LoadImg(applePath)
 	assert.Nil(t, err)
 
-	img, exists := r.GetImg("apple")
-
+	img := r.GetImg("apple")
 	assert.NotNil(t, img)
-	assert.True(t, exists)
 
-	img, exists = r.GetImg("nonexistent")
+	img = r.GetImg("nonexistent")
 	assert.NotNil(t, img) // default image
-	assert.False(t, exists)
 }
 
 func TestGetTexture(t *testing.T) {
@@ -240,14 +237,11 @@ func TestGetTexture(t *testing.T) {
 	err := r.LoadTexture(applePath)
 	assert.Nil(t, err)
 
-	texture, exists := r.GetTexture("apple")
-
+	texture := r.GetTexture("apple")
 	assert.NotNil(t, texture)
-	assert.True(t, exists)
 
-	texture, exists = r.GetTexture("nonexistent")
+	texture = r.GetTexture("nonexistent")
 	assert.NotNil(t, texture) // default texture
-	assert.False(t, exists)
 }
 
 func TestGetFont(t *testing.T) {
@@ -256,12 +250,9 @@ func TestGetFont(t *testing.T) {
 	err := r.LoadFont(fontpath)
 	assert.Nil(t, err)
 
-	font, exists := r.GetFont("arial")
-
+	font := r.GetFont("arial")
 	assert.NotNil(t, font)
-	assert.True(t, exists)
 
-	font, exists = r.GetFont("nonexistent")
+	font = r.GetFont("nonexistent")
 	assert.Equal(t, font, rl.GetFontDefault())
-	assert.False(t, exists)
 }

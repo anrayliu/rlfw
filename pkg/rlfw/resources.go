@@ -259,31 +259,28 @@ func (r *Resources) UnloadDir(dir string) error {
 }
 
 // GetTexture retrieves a texture by name.
-// Returns a second value: a bool that's true if the referenced texture exists.
-func (r *Resources) GetTexture(name string) (rl.Texture2D, bool) {
+func (r *Resources) GetTexture(name string) rl.Texture2D {
 	texture, ok := r.textures[name]
 	if !ok {
-		return r.defaultTexture, false
+		return r.defaultTexture
 	}
-	return texture, true
+	return texture
 }
 
 // GetImg retrieves an image by name.
-// Returns a second value: a bool that's true if the referenced image exists.
-func (r *Resources) GetImg(name string) (*rl.Image, bool) {
+func (r *Resources) GetImg(name string) *rl.Image {
 	img, ok := r.images[name]
 	if !ok {
-		return r.defaultImg, false
+		return r.defaultImg
 	}
-	return img, true
+	return img
 }
 
 // GetFont retrieves a font by name.
-// Returns a second value: a bool that's true if the referenced font exists.
-func (r *Resources) GetFont(name string) (rl.Font, bool) {
+func (r *Resources) GetFont(name string) rl.Font {
 	font, ok := r.fonts[name]
 	if !ok {
-		return rl.GetFontDefault(), false
+		return rl.GetFontDefault()
 	}
-	return font, true
+	return font
 }
